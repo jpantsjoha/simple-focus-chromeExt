@@ -5,19 +5,19 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/popup.css">
-    <script src="./js/background.js" defer></script>
+    <script src="./js/popup.js" defer></script>
     <title>Simple Focus Mode</title>
   </head>
   <body>
     <div id="app">
     <h1>Simple Focus</h1>
     <div>Pomodoro Timer</div>
-    <h1><div id="timer-display">30:00</div></h1>
+    <h2>Focus <div id="timer-display">30 Minutes</div></h2>
+    <h2>Remaining <p id="countdown-display"></p></h2>
     <input id="timer-slider" type="range" min="1" max="120" step="1" value="30" />
     <br />
     <button id="start-timer">Start Timer</button>
     <button id="stop-timer">Stop Timer</button>
-    <p id="countdown-display"></p>
     </div>
   </body>
 </html>
