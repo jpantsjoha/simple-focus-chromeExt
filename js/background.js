@@ -20,7 +20,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             clearInterval(countdownInterval);
             countdownState.remainingSeconds = null;
             // Play the soft ping sound
-            new Audio('/clock_alarm.mp3').play();
+            // new Audio('/clock_alarm.mp3').play();
+            alert('Focus Time Finished!');
           } else {
             countdownState.remainingSeconds = remainingSeconds;
             chrome.runtime.sendMessage({
@@ -34,7 +35,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         countdownState.remainingSeconds = null;
       } else if (message.command === "requestCountdownState") {
         sendResponse(countdownState);
+      } else {
+      // Catch-all for any other messages
+      sendResponse({ received: true });
       }
     });
-    
     

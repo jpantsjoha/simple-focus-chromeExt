@@ -5,7 +5,19 @@ const timerSlider = document.getElementById("timer-slider");
 const countdownDisplay = document.getElementById("countdown-display");
 
 timerSlider.addEventListener("input", () => {
-  timerDisplay.textContent = `${timerSlider.value}:00`;
+  const focusTime = timerSlider.value;
+  timerDisplay.textContent = `${focusTime}:00`;
+  // Store the focus time setting
+  chrome.storage.sync.set({ focusTimeSetting: focusTime });
+});
+
+//Todo Fix Async issue with state setting to chrome background
+chrome.storage.sync.get("focusTimeSetting", (data) => {
+  // Retrieve the focus time 
+  if (data.focusTimeSetting) {
+    timerDisplay.textContent = `${data.focusTimeSetting}:00`;
+    timerSlider.value = data.focusTimeSetting;
+  }
 });
 
 startButton.addEventListener("click", () => {
