@@ -49,7 +49,14 @@ function updateCountdownDisplay(remainingSeconds) {
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.command === "timerFinished") {
-    alert("Focus Time Finished!");
+    // Create a notification
+    chrome.notifications.create({
+      type: "basic",
+      title: "Simple Focus Mode",
+      message: "Focus Time Finished!",
+      iconUrl: "../icons/icon48.png",
+    });
+
     // Play the soft ping sound
     const audio = new Audio(chrome.runtime.getURL('../clock_alarm.mp3'));
     audio.play();
