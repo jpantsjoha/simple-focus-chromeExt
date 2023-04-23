@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "priority": 1,
+      "action": {
+        "type": "block"
+      },
+      "condition": {
+        "url_filter": "||facebook.com^",
+        "domains": ["facebook.com"],
+        "resource_types": ["main_frame"]
+      }
+    },
+    {
+      "id": 2,
+      "priority": 1,
+      "action": {
+        "type": "block"
+      },
+      "condition": {
+        "url_filter": "||twitter.com^",
+        "domains": ["twitter.com"],
+        "resource_types": ["main_frame"]
+      }
+    }
+  ]
+  

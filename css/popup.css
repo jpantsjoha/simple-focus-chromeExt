@@ -1,0 +1,55 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  min-width: 300px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin: 0;
+}
+
+.range-value {
+  width: 50px;
+  text-align: center;
+  font-size: 16px;
+}
+
+button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+#countdown-display {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.timer-buttons {
+  display: flex;
+  justify-content: space-around;
+}
