@@ -1,31 +1,40 @@
 {
-    "manifest_version": 3,
-    "name": "Simple Focus Mode",
-    "version": "1.0",
-    "description": "A Chrome extension to improve productivity and reduce distractions.",
-    "permissions": ["storage", "declarativeNetRequest", "notifications", "declarativeNetRequestFeedback", "notifications"],
-    "action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "icons/icon16.png"
+  "manifest_version": 3,
+  "name": "Simple Focus Mode",
+  "version": "1.0",
+  "description": "A Chrome extension to improve productivity and reduce distractions.",
+  "permissions": ["storage", "declarativeNetRequest", "notifications", "declarativeNetRequestFeedback"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png"
     }
-    },
-    "icons": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png"
-    },
-    "options_page": "options.html",
-    "background": {
-      "service_worker": "./js/background.js"
-    },
-    "declarative_net_request": {
-      "rule_resources": [
-        {
-          "id": "rules",
-          "path": "rules.json",
-          "enabled": true
-        }
-      ]
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "./js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["./js/content.js"]
     }
+  ],
+  "web_accessible_resources": [{ 
+    "resources": ["clock_alarm.mp3"],
+    "matches": ["<all_urls>"]
+  }],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "rules",
+        "path": "rules.json",
+        "enabled": true
+      }
+    ]
   }
-  
+}

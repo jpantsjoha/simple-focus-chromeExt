@@ -46,3 +46,14 @@ function updateCountdownDisplay(remainingSeconds) {
   const seconds = remainingSeconds % 60;
   countdownDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 }
+
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.command === "timerFinished") {
+    alert("Focus Time Finished!");
+    // Play the soft ping sound
+    const audio = new Audio(chrome.runtime.getURL('../clock_alarm.mp3'));
+    audio.play();
+  }
+});
+
+

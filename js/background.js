@@ -15,13 +15,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         countdownInterval = setInterval(() => {
           const currentTime = new Date().getTime();
           const remainingSeconds = Math.round((endTime - currentTime) / 1000);
-    
+
+          // on timer end, send message up to popup layer to alert
           if (remainingSeconds <= 0) {
             clearInterval(countdownInterval);
             countdownState.remainingSeconds = null;
-            // Play the soft ping sound
-            // new Audio('/clock_alarm.mp3').play();
-            alert('Focus Time Finished!');
+            // Send a message to popup.js
+            chrome.runtime.sendMessage({ command: "timerFinished" });
+
           } else {
             countdownState.remainingSeconds = remainingSeconds;
             chrome.runtime.sendMessage({
