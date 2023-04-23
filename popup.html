@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self';">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/popup.css">
-  <script src="./js/popup.js"></script>
-  <title>Simple Focus Mode</title>
-</head>
-<body>
-  <div id="app">
-    <h1>Simple Focus Mode</h1>
-    <h1><p>Time remaining:</p></h1>
-    <p id="timer-display">30:00</p>
-    <label for="timer-slider">Choose duration:</label>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self';">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/popup.css">
+    <script src="./js/background.js" defer></script>
+    <title>Simple Focus Mode</title>
+  </head>
+  <body>
+    <div id="app">
+    <h1>Simple Focus</h1>
+    <div>Pomodoro Timer</div>
+    <h1><div id="timer-display">30:00</div></h1>
     <input id="timer-slider" type="range" min="1" max="120" step="1" value="30" />
-    <p id="slider-value">30</p>
-    <button id="start-timer">Start</button>
-    <button id="pause-continue-button">Pause-Continue</button>
-    <button id="reset-timer">Reset</button>
-  </div>
-</body>
+    <br />
+    <button id="start-timer">Start Timer</button>
+    <button id="stop-timer">Stop Timer</button>
+    <p id="countdown-display"></p>
+    </div>
+  </body>
 </html>
-
-
-
-
-
