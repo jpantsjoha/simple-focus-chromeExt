@@ -6,7 +6,9 @@ This is my take on the **Simple Focus Mode**  Extension which I have created for
 
 This is a simple Pomodoro Timer extension for Google Chrome called **Simple Focus Mode**. It helps users improve productivity by breaking their work into focused intervals, separated by short breaks. The extension allows users to start a Pomodoro session, pause it, and customize the duration of the session.
 
-![Simple Focus Mode](./screenshot.png)
+[![Short Walk-through Demo Video](https://img.youtube.com/vi/mbE6vxXMFlw/0.jpg)](https://www.youtube.com/watch?v=mbE6vxXMFlw)
+
+<img src="./screenshot.png" alt="Simple Focus Mode" width="400px"/>
 
 ## Features
 
