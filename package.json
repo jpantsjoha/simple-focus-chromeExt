@@ -1,0 +1,38 @@
+{
+  "name": "simple-focus-mode",
+  "version": "0.3.0",
+  "description": "Elegant Pomodoro timer Chrome extension with minimalist design",
+  "main": "js/background.js",
+  "scripts": {
+    "lint": "eslint js/ --fix",
+    "lint:check": "eslint js/",
+    "validate": "node scripts/validate-manifest.js",
+    "build": "node scripts/build.js",
+    "test": "echo \"No tests specified\" && exit 0",
+    "release": "npm run lint:check && npm run validate && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/simple-focus-chromeExt.git"
+  },
+  "keywords": [
+    "pomodoro",
+    "timer",
+    "productivity",
+    "focus",
+    "chrome-extension",
+    "minimalist"
+  ],
+  "author": "JP",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-chrome-extension": "^0.7.0",
+    "eslint-plugin-webext": "^0.7.0",
+    "archiver": "^5.3.2",
+    "chalk": "^4.1.2"
+  },
+  "browserslist": [
+    "Chrome >= 88"
+  ]
+}
