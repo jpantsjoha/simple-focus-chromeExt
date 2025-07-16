@@ -1,4 +1,4 @@
-chrome.storage.sync.get("ignoredWebsites", (data) => {
+chrome.storage.sync.get('ignoredWebsites', (data) => {
     const currentURL = window.location.hostname;
   
     if (data.ignoredWebsites && data.ignoredWebsites.includes(currentURL)) {
@@ -6,7 +6,7 @@ chrome.storage.sync.get("ignoredWebsites", (data) => {
       window.alert = () => {};
       const oldNotification = window.Notification;
       window.Notification = function () {
-        return new oldNotification("Silent Notification", {
+        return new oldNotification('Silent Notification', {
           silent: true,
         });
       };

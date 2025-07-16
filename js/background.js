@@ -76,7 +76,7 @@ function startTimer(duration) {
       
       // Send completion message
       chrome.runtime.sendMessage({ 
-        command: "timerFinished",
+        command: 'timerFinished',
         sessionType: countdownState.sessionType,
         sessionCount: countdownState.sessionCount,
         cyclePosition: countdownState.cyclePosition
@@ -90,7 +90,7 @@ function startTimer(duration) {
     } else {
       countdownState.remainingSeconds = remainingSeconds;
       chrome.runtime.sendMessage({
-        command: "updateCountdown",
+        command: 'updateCountdown',
         remainingSeconds: remainingSeconds,
         sessionType: countdownState.sessionType,
         sessionCount: countdownState.sessionCount,
@@ -131,27 +131,27 @@ function stopTimer() {
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     try {
-      if (message.command === "startTimer") {
+      if (message.command === 'startTimer') {
           const duration = message.duration * 60; // Convert minutes to seconds
           startTimer(duration);
           sendResponse({ success: true });
-        } else if (message.command === "startPomodoroCycle") {
+        } else if (message.command === 'startPomodoroCycle') {
           // Reset cycle and start first focus session
           countdownState.sessionCount = 0;
           countdownState.cyclePosition = 0;
           countdownState.sessionType = 'focus';
           startNextSession();
           sendResponse({ success: true });
-        } else if (message.command === "pauseTimer") {
+        } else if (message.command === 'pauseTimer') {
           pauseTimer();
           sendResponse({ success: true });
-        } else if (message.command === "resumeTimer") {
+        } else if (message.command === 'resumeTimer') {
           resumeTimer();
           sendResponse({ success: true });
-        } else if (message.command === "stopTimer") {
+        } else if (message.command === 'stopTimer') {
           stopTimer();
           sendResponse({ success: true });
-        } else if (message.command === "requestCountdownState") {
+        } else if (message.command === 'requestCountdownState') {
           sendResponse(countdownState);
         } else {
         // Catch-all for any other messages

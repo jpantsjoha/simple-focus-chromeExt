@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadIgnoredWebsites();
   
-    const saveButton = document.getElementById("save-button");
-    saveButton.addEventListener("click", saveIgnoredWebsites);
+    const saveButton = document.getElementById('save-button');
+    saveButton.addEventListener('click', saveIgnoredWebsites);
     
   });
   
