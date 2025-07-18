@@ -10,12 +10,13 @@ let countdownState = {
   cyclePosition: 0, // 0-7 (4 focus + 3 short breaks + 1 long break)
 };
 
+let sessionDurations = {
+  focus: 25,
+  shortBreak: 5,
+  longBreak: 15
+};
+
 function startNextSession() {
-  const sessionDurations = {
-    focus: 25, // 25 minutes
-    shortBreak: 5, // 5 minutes
-    longBreak: 15 // 15 minutes
-  };
   
   // Determine session type based on cycle position
   if (countdownState.cyclePosition === 7) {
@@ -156,6 +157,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         } else if (message.command === 'stopTimer') {
           stopTimer();
           sendResponse({ success: true });
+        } else if (message.command === 'updateTimer') {
+          // Update remaining time (from interactive progress bar)
+          const newRemainingSeconds = message.remainingSeconds;
+          if (countdownState.isActive && newRemainingSeconds > 0) {
+            countdownState.remainingSeconds = newRemainingSeconds;
+            endTime = new Date().getTime() + newRemainingSeconds * 1000;
+            sendResponse({ success: true });
+          }
+        } else if (message.command === 'updateSessionDuration') {
+          // Update session duration settings
+          const sessionType = message.sessionType;
+          const duration = message.duration;
+          if (sessionDurations[sessionType] !== undefined) {
+            sessionDurations[sessionType] = duration;
+            sendResponse({ success: true });
+          }
         } else if (message.command === 'requestCountdownState') {
           sendResponse(countdownState);
         } else {

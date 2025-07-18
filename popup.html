@@ -25,8 +25,11 @@
           <div id="countdown-display">25:00</div>
         </div>
         
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-handle" id="progress-handle"></div>
+          </div>
         </div>
       </div>
       
@@ -51,14 +54,61 @@
       
       <div class="cycle-progress">
         <div class="cycle-dots">
-          <span class="dot active" data-position="0"></span>
-          <span class="dot" data-position="1"></span>
-          <span class="dot" data-position="2"></span>
-          <span class="dot" data-position="3"></span>
-          <span class="dot" data-position="4"></span>
-          <span class="dot" data-position="5"></span>
-          <span class="dot" data-position="6"></span>
-          <span class="dot" data-position="7"></span>
+          <span class="dot active" data-position="0" data-type="focus" data-duration="25" title="Focus: 25 min"></span>
+          <span class="dot" data-position="1" data-type="shortBreak" data-duration="5" title="Break: 5 min"></span>
+          <span class="dot" data-position="2" data-type="focus" data-duration="25" title="Focus: 25 min"></span>
+          <span class="dot" data-position="3" data-type="shortBreak" data-duration="5" title="Break: 5 min"></span>
+          <span class="dot" data-position="4" data-type="focus" data-duration="25" title="Focus: 25 min"></span>
+          <span class="dot" data-position="5" data-type="shortBreak" data-duration="5" title="Break: 5 min"></span>
+          <span class="dot" data-position="6" data-type="focus" data-duration="25" title="Focus: 25 min"></span>
+          <span class="dot" data-position="7" data-type="longBreak" data-duration="15" title="Long Break: 15 min"></span>
+        </div>
+        <button id="help-icon" class="help-icon" title="About Simple Focus">?</button>
+      </div>
+    </div>
+    
+    <!-- About page -->
+    <div id="about-page" class="about-page hidden">
+      <button id="about-close" class="about-close">×</button>
+      <div class="about-content">
+        <h3>Pomodoro Timer for Deep Focus</h3>
+        <p>A minimalist productivity tool that helps you maintain focus using the proven Pomodoro Technique.</p>
+        
+        <h4>How it Works:</h4>
+        <ul>
+          <li><strong>8 Dots = 1 Complete Cycle</strong></li>
+          <li>4 Focus sessions (25 min each)</li>
+          <li>3 Short breaks (5 min each)</li>
+          <li>1 Long break (15 min)</li>
+        </ul>
+        
+        <h4>Interactive Features:</h4>
+        <ul>
+          <li><strong>Progress Bar:</strong> Hover to see blue handle, drag to reduce time</li>
+          <li><strong>Dot Editing:</strong> Click dots to customize session durations</li>
+          <li><strong>Website Blocking:</strong> Automatically blocks distracting sites during focus</li>
+        </ul>
+        
+        <div class="about-footer">
+          <p>Created by <a href="https://linkedin.com/in/johas" target="_blank">Jaroslav Pantsjoha</a></p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal overlay for dot editor -->
+    <div class="modal-overlay hidden" id="modal-overlay">
+      <div class="dot-editor" id="dot-editor">
+        <div class="editor-header">
+          <span id="editor-title">Edit Session</span>
+          <button id="editor-close" class="editor-close">×</button>
+        </div>
+        <div class="editor-content">
+          <label for="duration-input">Duration (minutes):</label>
+          <input type="number" id="duration-input" min="1" max="120" value="25">
+          <div class="editor-actions">
+            <button id="editor-save" class="btn primary">Save</button>
+            <button id="editor-cancel" class="btn secondary">Cancel</button>
+          </div>
         </div>
       </div>
     </div>

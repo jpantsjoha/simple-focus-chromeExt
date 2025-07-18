@@ -1,6 +1,6 @@
 {
   "name": "simple-focus-mode",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Elegant Pomodoro timer Chrome extension with minimalist design",
   "main": "js/background.js",
   "scripts": {
