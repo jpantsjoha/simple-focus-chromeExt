@@ -74,12 +74,15 @@ function startTimer(duration) {
       // Move to next cycle position
       countdownState.cyclePosition = (countdownState.cyclePosition + 1) % 8;
       
-      // Send completion message
+      // Send completion message to popup if it exists
       chrome.runtime.sendMessage({ 
         command: 'timerFinished',
         sessionType: countdownState.sessionType,
         sessionCount: countdownState.sessionCount,
         cyclePosition: countdownState.cyclePosition
+      }).catch(() => {
+        // Popup might be closed, that's okay
+        // Popup not available for timer finished message
       });
       
       // Auto-start next session (can be made optional)
@@ -95,6 +98,8 @@ function startTimer(duration) {
         sessionType: countdownState.sessionType,
         sessionCount: countdownState.sessionCount,
         cyclePosition: countdownState.cyclePosition
+      }).catch(() => {
+        // Popup might be closed, that's okay - this is normal behavior
       });
     }
   }, 1000);
