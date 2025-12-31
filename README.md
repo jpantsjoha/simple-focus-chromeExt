@@ -8,7 +8,10 @@ This is a minimalist Pomodoro Timer extension for Google Chrome called **Simple 
 
 [![Short Walk-through Demo Video](https://img.youtube.com/vi/mbE6vxXMFlw/0.jpg)](https://www.youtube.com/watch?v=mbE6vxXMFlw)
 
-<img src="./screenshot.png" alt="Simple Focus Mode" width="400px"/>
+<div align="center">
+  <img src="AppSubmission/popup.png" alt="Popup UI" width="300px"/>
+  <img src="AppSubmission/popup-page.png" alt="Options / About Page" width="300px"/>
+</div>
 
 ## Features
 

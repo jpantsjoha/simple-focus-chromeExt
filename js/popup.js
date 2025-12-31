@@ -94,6 +94,8 @@ function updateTheme() {
   }
 }
 
+themeToggle.textContent = isDarkMode ? '◑' : '◐';
+themeToggle.title = isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
 
 
 // Settings button
