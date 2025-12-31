@@ -10,7 +10,8 @@ This is a minimalist Pomodoro Timer extension for Google Chrome called **Simple 
 
 <div align="center">
   <img src="AppSubmission/popup.png" alt="Popup UI" width="300px"/>
-
+  <img src="AppSubmission/popup-page.png" alt="Options / About Page" width="300px"/>
+</div>
 
 ## Features
 
