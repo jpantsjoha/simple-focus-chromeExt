@@ -1,20 +1,5 @@
 /* Minmimal monochromatic theme focused on reducing visual noise */
 /* Variables inherited from common.css */
-:root {
-  --text-muted: #6a6a6a;
-  --progress-bg: #f0f0f0;
-  --progress-fg: #333333;
-  --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-muted: #a0a0a0;
-    --progress-bg: #2a2a2a;
-    --progress-fg: #ffffff;
-    --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  }
-}
 
 * {
   box-sizing: border-box;
