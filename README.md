@@ -6,12 +6,11 @@ This is my take on the **Simple Focus Mode** Extension which I have created for 
 
 This is a minimalist Pomodoro Timer extension for Google Chrome called **Simple Focus Mode**. It helps users improve productivity by breaking their work into focused intervals, separated by short breaks. The extension features an elegant monochromatic design that reduces visual distractions while providing powerful time management tools.
 
-[![Short Walk-through Demo Video](https://img.youtube.com/vi/mbE6vxXMFlw/0.jpg)](https://www.youtube.com/watch?v=mbE6vxXMFlw)
+[![Short Walk-through Demo Video](https://img.youtube.com/vi/L4Tti-2yaEA/0.jpg)](https://www.youtube.com/watch?v=L4Tti-2yaEA)
 
 <div align="center">
   <img src="AppSubmission/popup.png" alt="Popup UI" width="300px"/>
-  <img src="AppSubmission/popup-page.png" alt="Options / About Page" width="300px"/>
-</div>
+
 
 ## Features
 
