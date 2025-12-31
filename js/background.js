@@ -16,8 +16,27 @@ let sessionDurations = {
   longBreak: 15
 };
 
+// Initialize Context Menu
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: 'start-focus-session',
+    title: 'Zone In (Start Focus Session)',
+    contexts: ['all']
+  });
+});
+
+chrome.contextMenus.onClicked.addListener((info, _tab) => {
+  if (info.menuItemId === 'start-focus-session') {
+    // Start a fresh cycle
+    countdownState.sessionCount = 0;
+    countdownState.cyclePosition = 0;
+    countdownState.sessionType = 'focus';
+    startNextSession();
+  }
+});
+
 function startNextSession() {
-  
+
   // Determine session type based on cycle position
   if (countdownState.cyclePosition === 7) {
     // Long break after 4 pomodoros
@@ -29,7 +48,7 @@ function startNextSession() {
     // Focus session at even positions (0, 2, 4, 6)
     countdownState.sessionType = 'focus';
   }
-  
+
   const duration = sessionDurations[countdownState.sessionType] * 60;
   startTimer(duration);
 }
@@ -40,7 +59,7 @@ function startTimer(duration) {
   countdownState.isActive = true;
   countdownState.isPaused = false;
   clearInterval(countdownInterval);
-  
+
   // Enable website blocking for focus sessions
   try {
     if (countdownState.sessionType === 'focus') {
@@ -58,7 +77,7 @@ function startTimer(duration) {
 
   countdownInterval = setInterval(() => {
     if (countdownState.isPaused) return;
-    
+
     const currentTime = new Date().getTime();
     const remainingSeconds = Math.round((endTime - currentTime) / 1000);
 
@@ -66,17 +85,17 @@ function startTimer(duration) {
       clearInterval(countdownInterval);
       countdownState.remainingSeconds = null;
       countdownState.isActive = false;
-      
+
       // Update session counts
       if (countdownState.sessionType === 'focus') {
         countdownState.sessionCount++;
       }
-      
+
       // Move to next cycle position
       countdownState.cyclePosition = (countdownState.cyclePosition + 1) % 8;
-      
+
       // Send completion message to popup if it exists
-      chrome.runtime.sendMessage({ 
+      chrome.runtime.sendMessage({
         command: 'timerFinished',
         sessionType: countdownState.sessionType,
         sessionCount: countdownState.sessionCount,
@@ -85,12 +104,12 @@ function startTimer(duration) {
         // Popup might be closed, that's okay
         // Popup not available for timer finished message
       });
-      
+
       // Auto-start next session (can be made optional)
       setTimeout(() => {
         startNextSession();
       }, 2000);
-      
+
     } else {
       countdownState.remainingSeconds = remainingSeconds;
       chrome.runtime.sendMessage({
@@ -124,7 +143,7 @@ function stopTimer() {
   countdownState.remainingSeconds = null;
   countdownState.isActive = false;
   countdownState.isPaused = false;
-  
+
   // Disable website blocking
   try {
     chrome.declarativeNetRequest.updateEnabledRulesets({
@@ -136,55 +155,65 @@ function stopTimer() {
 }
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    try {
-      if (message.command === 'startTimer') {
-          const duration = message.duration * 60; // Convert minutes to seconds
-          startTimer(duration);
-          sendResponse({ success: true });
-        } else if (message.command === 'startPomodoroCycle') {
-          // Reset cycle and start first focus session
-          countdownState.sessionCount = 0;
-          countdownState.cyclePosition = 0;
-          countdownState.sessionType = 'focus';
-          startNextSession();
-          sendResponse({ success: true });
-        } else if (message.command === 'pauseTimer') {
-          pauseTimer();
-          sendResponse({ success: true });
-        } else if (message.command === 'resumeTimer') {
-          resumeTimer();
-          sendResponse({ success: true });
-        } else if (message.command === 'stopTimer') {
-          stopTimer();
-          sendResponse({ success: true });
-        } else if (message.command === 'updateTimer') {
-          // Update remaining time (from interactive progress bar)
-          const newRemainingSeconds = message.remainingSeconds;
-          if (countdownState.isActive && newRemainingSeconds > 0) {
-            countdownState.remainingSeconds = newRemainingSeconds;
-            endTime = new Date().getTime() + newRemainingSeconds * 1000;
-            sendResponse({ success: true });
-          }
-        } else if (message.command === 'updateSessionDuration') {
-          // Update session duration settings
-          const sessionType = message.sessionType;
-          const duration = message.duration;
-          if (sessionDurations[sessionType] !== undefined) {
-            sessionDurations[sessionType] = duration;
-            sendResponse({ success: true });
-          }
-        } else if (message.command === 'requestCountdownState') {
-          sendResponse(countdownState);
-        } else {
-        // Catch-all for any other messages
-        sendResponse({ received: true });
+  try {
+    if (message.command === 'startTimer') {
+      const duration = message.duration * 60; // Convert minutes to seconds
+      startTimer(duration);
+      sendResponse({ success: true });
+    } else if (message.command === 'extendTimer') {
+      // Add 60 seconds to the timer
+      if (countdownState.isActive) {
+        endTime += 60000;
+        if (countdownState.remainingSeconds !== null) {
+          countdownState.remainingSeconds += 60;
         }
-    } catch (error) {
-      console.error('Background script error:', error);
-      sendResponse({ success: false, error: error.message });
+        sendResponse({ success: true, newEndTime: endTime });
+      } else {
+        sendResponse({ success: false, error: 'Timer not active' });
+      }
+    } else if (message.command === 'startPomodoroCycle') {
+      // Reset cycle and start first focus session
+      countdownState.sessionCount = 0;
+      countdownState.cyclePosition = 0;
+      countdownState.sessionType = 'focus';
+      startNextSession();
+      sendResponse({ success: true });
+    } else if (message.command === 'pauseTimer') {
+      pauseTimer();
+      sendResponse({ success: true });
+    } else if (message.command === 'resumeTimer') {
+      resumeTimer();
+      sendResponse({ success: true });
+    } else if (message.command === 'stopTimer') {
+      stopTimer();
+      sendResponse({ success: true });
+    } else if (message.command === 'updateTimer') {
+      // Update remaining time (from interactive progress bar)
+      const newRemainingSeconds = message.remainingSeconds;
+      if (countdownState.isActive && newRemainingSeconds > 0) {
+        countdownState.remainingSeconds = newRemainingSeconds;
+        endTime = new Date().getTime() + newRemainingSeconds * 1000;
+        sendResponse({ success: true });
+      }
+    } else if (message.command === 'updateSessionDuration') {
+      // Update session duration settings
+      const sessionType = message.sessionType;
+      const duration = message.duration;
+      if (sessionDurations[sessionType] !== undefined) {
+        sessionDurations[sessionType] = duration;
+        sendResponse({ success: true });
+      }
+    } else if (message.command === 'requestCountdownState') {
+      sendResponse(countdownState);
+    } else {
+      // Catch-all for any other messages
+      sendResponse({ received: true });
     }
-    
-    // Return true to indicate we will send a response asynchronously
-    return true;
-  });
-    
+  } catch (error) {
+    console.error('Background script error:', error);
+    sendResponse({ success: false, error: error.message });
+  }
+
+  // Return true to indicate we will send a response asynchronously
+  return true;
+});

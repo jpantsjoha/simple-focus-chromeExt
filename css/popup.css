@@ -1,24 +1,19 @@
-/* Minimal monochromatic theme focused on reducing visual noise */
+/* Minmimal monochromatic theme focused on reducing visual noise */
+/* Variables inherited from common.css */
 :root {
-  --bg-color: #fafafa;
-  --text-color: #2a2a2a;
   --text-muted: #6a6a6a;
-  --accent-color: #333333;
-  --border-color: #e8e8e8;
   --progress-bg: #f0f0f0;
   --progress-fg: #333333;
   --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.dark-mode {
-  --bg-color: #1a1a1a;
-  --text-color: #e8e8e8;
-  --text-muted: #a0a0a0;
-  --accent-color: #ffffff;
-  --border-color: #2a2a2a;
-  --progress-bg: #2a2a2a;
-  --progress-fg: #ffffff;
-  --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-muted: #a0a0a0;
+    --progress-bg: #2a2a2a;
+    --progress-fg: #ffffff;
+    --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
 }
 
 * {
@@ -26,19 +21,24 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--bg-color);
+  font-family: var(--font-stack);
+  background-color: transparent;
+  /* Transparent to let glass effect work if supported, else bg-color from common */
   color: var(--text-color);
   margin: 0;
   padding: 0;
   width: 320px;
   min-height: 360px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 #app {
   padding: 24px;
   text-align: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
+  min-height: 360px;
 }
 
 /* Utility classes */
@@ -453,7 +453,9 @@ input[type="range"]::-moz-range-thumb {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--bg-color);
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
   padding: 16px;
   overflow-y: hidden;
   z-index: 100;

@@ -1,36 +1,122 @@
+/* Inherits variables from common.css */
+
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #dadada;
-    margin: 10;
-    padding: 10;
-  }
-  
-  h1 {
-    font-size: 24px;
-    margin: 10px 0;
-  }
-  
-  h2 {
-    font-size: 18px;
-    margin: 10px 0;
-  }
-  
-  textarea {
-    width: 100%;
-    resize: none;
-  }
-  
-  button {
-    background-color: #4caf50;
-    border: none;
-    color: white;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
-  
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+textarea {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-color);
+  font-family: var(--font-stack);
+  font-size: 14px;
+  resize: vertical;
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
+  transition: all 0.2s ease;
+  outline: none;
+  box-shadow: var(--glass-shadow);
+}
+
+textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
+}
+
+.btn {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  padding: 12px 32px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin-top: 24px;
+  box-shadow: var(--glass-shadow);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Capabilities Section */
+.capabilities-section {
+  margin-top: 48px;
+  padding: 24px;
+  width: 100%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
+}
+
+.capabilities-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.status-label {
+  color: var(--text-muted);
+}
+
+.status-value {
+  font-weight: 500;
+}
+
+.status-value.checking {
+  color: var(--accent-color);
+}
+
+.status-value.success {
+  color: var(--success-color);
+}
+
+.status-value.error {
+  color: var(--danger-color);
+}
+
+.status-value.warning {
+  color: #ff9f0a;
+}

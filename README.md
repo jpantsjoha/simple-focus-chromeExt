@@ -14,7 +14,10 @@ This is a minimalist Pomodoro Timer extension for Google Chrome called **Simple 
 
 - **Complete Pomodoro Cycle**: Full 25-5-25-5-25-5-25-15 minute cycles with automatic transitions
 - **Intelligent Website Blocking**: Dynamic blocking during focus sessions only (Facebook, Twitter, Instagram, YouTube, Reddit, TikTok)
-- **Elegant Minimal Design**: Monochromatic interface that reduces visual noise
+- **Glassmorphism UI**: 2026 "Liquid Calm" aesthetic with backdrop blurring and modern typography
+- **Context Menu "Zone In"**: Right-click anywhere to immediately start a focus session
+- **AI Readiness**: Built-in check for Gemini Nano capabilities
+- **+1 Minute Extension**: Quickly extend sessions without breaking flow
 - **Session Tracking**: Visual progress indicators and cycle completion tracking
 - **Dark Mode Support**: Seamless theme switching for different working environments
 - **Pause/Resume Functionality**: Full timer control with accurate time tracking
