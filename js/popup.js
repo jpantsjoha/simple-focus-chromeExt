@@ -4,6 +4,7 @@ const startCustomBtn = document.getElementById('start-custom');
 const startCustomTimerBtn = document.getElementById('start-custom-timer');
 const pauseBtn = document.getElementById('pause-timer');
 const resumeBtn = document.getElementById('resume-timer');
+const extendBtn = document.getElementById('extend-timer');
 const stopBtn = document.getElementById('stop-timer');
 const themeToggle = document.getElementById('theme-toggle');
 const timerDisplay = document.getElementById('timer-display');
@@ -28,7 +29,9 @@ const aboutPage = document.getElementById('about-page');
 const aboutClose = document.getElementById('about-close');
 
 let originalDuration = 0;
-let isDarkMode = false;
+// Theme initialization
+const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+let isDarkMode = systemPrefersDark; // Default to system
 let isTimerRunning = false;
 let isDragging = false;
 let currentEditingDot = null;
@@ -44,10 +47,13 @@ chrome.storage.sync.get(['focusTimeSetting', 'darkMode', 'sessionDurations'], (d
     timerDisplay.textContent = `${data.focusTimeSetting} min`;
     timerSlider.value = data.focusTimeSetting;
   }
-  if (data.darkMode) {
+
+  // If user has a saved preference, use it. Otherwise use system default.
+  if (data.darkMode !== undefined) {
     isDarkMode = data.darkMode;
-    updateTheme();
   }
+  updateTheme();
+
   if (data.sessionDurations) {
     sessionDurations = { ...sessionDurations, ...data.sessionDurations };
     // Update dot tooltips with saved durations
@@ -56,8 +62,8 @@ chrome.storage.sync.get(['focusTimeSetting', 'darkMode', 'sessionDurations'], (d
       const duration = sessionDurations[type];
       if (duration) {
         dot.dataset.duration = duration;
-        dot.title = `${type === 'focus' ? 'Focus' : 
-                     type === 'shortBreak' ? 'Break' : 'Long Break'}: ${duration} min`;
+        dot.title = `${type === 'focus' ? 'Focus' :
+          type === 'shortBreak' ? 'Break' : 'Long Break'}: ${duration} min`;
       }
     });
     // Update countdown display if not running
@@ -75,8 +81,33 @@ themeToggle.addEventListener('click', () => {
 });
 
 function updateTheme() {
-  document.body.classList.toggle('dark-mode', isDarkMode);
-  themeToggle.textContent = isDarkMode ? '◑' : '◐';
+  if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+    document.body.classList.remove('light-mode');
+    themeToggle.textContent = '◑'; // Moon/Dark icon representation
+    themeToggle.title = 'Switch to Light Mode';
+  } else {
+    document.body.classList.add('light-mode');
+    document.body.classList.remove('dark-mode');
+    themeToggle.textContent = '◐'; // Sun/Light icon representation
+    themeToggle.title = 'Switch to Dark Mode';
+  }
+}
+
+themeToggle.textContent = isDarkMode ? '◑' : '◐';
+themeToggle.title = isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+
+
+// Settings button
+const settingsBtn = document.getElementById('settings-btn');
+if (settingsBtn) {
+  settingsBtn.addEventListener('click', () => {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      window.open(chrome.runtime.getURL('options.html'));
+    }
+  });
 }
 
 // Timer slider
@@ -89,11 +120,11 @@ timerSlider.addEventListener('input', () => {
 // Interactive progress bar
 progressBar.addEventListener('click', (e) => {
   if (!isTimerRunning) return;
-  
+
   const rect = progressBar.getBoundingClientRect();
   const percentage = (e.clientX - rect.left) / rect.width;
   const newRemainingTime = Math.floor(originalDuration * (1 - percentage));
-  
+
   if (newRemainingTime > 0) {
     chrome.runtime.sendMessage({
       command: 'updateTimer',
@@ -105,43 +136,43 @@ progressBar.addEventListener('click', (e) => {
 // Progress handle dragging
 progressHandle.addEventListener('mousedown', (e) => {
   if (!isTimerRunning) return;
-  
+
   e.preventDefault();
   isDragging = true;
-  
+
   const handleMouseMove = (e) => {
     if (!isDragging) return;
-    
+
     const rect = progressBar.getBoundingClientRect();
     const percentage = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const newRemainingTime = Math.floor(originalDuration * (1 - percentage));
-    
+
     if (newRemainingTime > 0) {
       updateProgressBar(percentage * 100);
       updateCountdownDisplay(newRemainingTime);
     }
   };
-  
+
   const handleMouseUp = (e) => {
     if (!isDragging) return;
-    
+
     isDragging = false;
-    
+
     const rect = progressBar.getBoundingClientRect();
     const percentage = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
     const newRemainingTime = Math.floor(originalDuration * (1 - percentage));
-    
+
     if (newRemainingTime > 0) {
       chrome.runtime.sendMessage({
         command: 'updateTimer',
         remainingSeconds: newRemainingTime
       });
     }
-    
+
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
   };
-  
+
   document.addEventListener('mousemove', handleMouseMove);
   document.addEventListener('mouseup', handleMouseUp);
 });
@@ -152,7 +183,7 @@ cycleDots.forEach(dot => {
     e.stopPropagation();
     const type = dot.dataset.type;
     const duration = parseInt(dot.dataset.duration);
-    
+
     if (isTimerRunning) {
       // Preview mode - show what's coming next
       showDotPreview(dot, type, duration);
@@ -161,7 +192,7 @@ cycleDots.forEach(dot => {
       openDotEditor(dot, type, duration);
     }
   });
-  
+
   dot.addEventListener('mouseenter', () => {
     if (isTimerRunning) {
       dot.classList.add('preview');
@@ -169,7 +200,7 @@ cycleDots.forEach(dot => {
       dot.classList.add('editing');
     }
   });
-  
+
   dot.addEventListener('mouseleave', () => {
     dot.classList.remove('preview');
     // Only remove editing class if this dot is not actually being edited
@@ -237,6 +268,16 @@ resumeBtn.addEventListener('click', () => {
   pauseBtn.classList.remove('hidden');
 });
 
+extendBtn.addEventListener('click', () => {
+  chrome.runtime.sendMessage({ command: 'extendTimer' });
+  // Visual feedback
+  const originalText = extendBtn.textContent;
+  extendBtn.textContent = '👍';
+  setTimeout(() => {
+    extendBtn.textContent = originalText;
+  }, 1000);
+});
+
 stopBtn.addEventListener('click', () => {
   chrome.runtime.sendMessage({ command: 'stopTimer' });
   hideTimerControls();
@@ -299,8 +340,8 @@ chrome.runtime.sendMessage({ command: 'requestCountdownState' }, (response) => {
 document.addEventListener('keydown', (event) => {
   // Only process shortcuts if no input elements are focused
   if (document.activeElement.tagName === 'INPUT') return;
-  
-  switch(event.key) {
+
+  switch (event.key) {
     case ' ': // Spacebar - Start/Pause/Resume
       event.preventDefault();
       if (timerControls.classList.contains('hidden')) {
@@ -340,13 +381,13 @@ function updateUI(data) {
   updateCountdownDisplay(data.remainingSeconds);
   updateSessionInfo(data.sessionType, data.sessionCount, data.cyclePosition);
   updateCycleDots(data.cyclePosition);
-  
+
   // Update timer running state
   isTimerRunning = data.remainingSeconds > 0;
-  
+
   // Update progress bar visual state
   progressBar.classList.toggle('timer-active', isTimerRunning);
-  
+
   // Update progress bar
   if (originalDuration > 0 && data.remainingSeconds > 0) {
     const percentage = ((originalDuration - data.remainingSeconds) / originalDuration) * 100;
@@ -357,19 +398,19 @@ function updateUI(data) {
 // Dot editing functions
 function openDotEditor(dot, type, duration) {
   currentEditingDot = dot;
-  
+
   // Update editor content
-  const sessionName = type === 'focus' ? 'Focus Session' : 
-                     type === 'shortBreak' ? 'Short Break' : 'Long Break';
+  const sessionName = type === 'focus' ? 'Focus Session' :
+    type === 'shortBreak' ? 'Short Break' : 'Long Break';
   editorTitle.textContent = `Edit ${sessionName}`;
   durationInput.value = duration;
-  
+
   // Show modal overlay
   modalOverlay.classList.remove('hidden');
-  
+
   // Highlight editing dot
   dot.classList.add('editing');
-  
+
   // Focus input
   setTimeout(() => durationInput.focus(), 100);
 }
@@ -384,57 +425,57 @@ function closeDotEditor() {
 
 function saveDotDuration() {
   if (!currentEditingDot) return;
-  
+
   const newDuration = parseInt(durationInput.value);
   if (newDuration < 1 || newDuration > 120) {
     alert('Duration must be between 1 and 120 minutes');
     return;
   }
-  
+
   const type = currentEditingDot.dataset.type;
-  
+
   // Update local storage
   sessionDurations[type] = newDuration;
   chrome.storage.sync.set({ sessionDurations });
-  
+
   // Update dot display
   currentEditingDot.dataset.duration = newDuration;
-  currentEditingDot.title = `${type === 'focus' ? 'Focus' : 
-                             type === 'shortBreak' ? 'Break' : 'Long Break'}: ${newDuration} min`;
-  
+  currentEditingDot.title = `${type === 'focus' ? 'Focus' :
+    type === 'shortBreak' ? 'Break' : 'Long Break'}: ${newDuration} min`;
+
   // Update all dots of the same type
   cycleDots.forEach(dot => {
     if (dot.dataset.type === type) {
       dot.dataset.duration = newDuration;
-      dot.title = `${type === 'focus' ? 'Focus' : 
-                   type === 'shortBreak' ? 'Break' : 'Long Break'}: ${newDuration} min`;
+      dot.title = `${type === 'focus' ? 'Focus' :
+        type === 'shortBreak' ? 'Break' : 'Long Break'}: ${newDuration} min`;
     }
   });
-  
+
   // Send to background script
   chrome.runtime.sendMessage({
     command: 'updateSessionDuration',
     sessionType: type,
     duration: newDuration
   });
-  
+
   // Update countdown display if we're not running and this is a focus session
   if (!isTimerRunning && type === 'focus') {
     const minutes = Math.floor(newDuration);
     const seconds = Math.floor((newDuration - minutes) * 60);
     countdownDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
-  
+
   closeDotEditor();
 }
 
 function showDotPreview(dot, type, duration) {
-  const sessionName = type === 'focus' ? 'Focus Session' : 
-                     type === 'shortBreak' ? 'Short Break' : 'Long Break';
-  
+  const sessionName = type === 'focus' ? 'Focus Session' :
+    type === 'shortBreak' ? 'Short Break' : 'Long Break';
+
   // Update tooltip to show preview
   dot.title = `Next: ${sessionName} (${duration} min)`;
-  
+
   // Brief highlight
   dot.classList.add('preview');
   setTimeout(() => dot.classList.remove('preview'), 1000);
@@ -444,10 +485,10 @@ function updateCountdownDisplay(remainingSeconds) {
   const minutes = Math.floor(remainingSeconds / 60);
   const seconds = remainingSeconds % 60;
   countdownDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  
+
   // Update browser tab title
   document.title = `${minutes}:${seconds.toString().padStart(2, '0')} - Simple Focus`;
-  
+
   // Set original duration for progress calculation
   if (originalDuration === 0) {
     originalDuration = remainingSeconds;
@@ -460,9 +501,9 @@ function updateSessionInfo(sessionType, sessionCount, cyclePosition) {
     shortBreak: 'Short Break',
     longBreak: 'Long Break'
   };
-  
+
   sessionTypeDisplay.textContent = sessionTypes[sessionType] || 'Focus Session';
-  
+
   if (sessionType === 'focus') {
     const focusSessionNumber = Math.floor(cyclePosition / 2) + 1;
     sessionCounter.textContent = `Focus ${focusSessionNumber} of 4`;
@@ -475,14 +516,14 @@ function updateSessionInfo(sessionType, sessionCount, cyclePosition) {
 
 function handleTimerFinished(message) {
   originalDuration = 0;
-  
+
   // Create notification
   const sessionTypes = {
     focus: 'Focus session complete! Time for a break.',
     shortBreak: 'Break over! Ready for another focus session?',
     longBreak: 'Long break complete! Great job on completing the cycle!'
   };
-  
+
   chrome.notifications.create({
     type: 'basic',
     title: 'Simple Focus Mode',
@@ -493,7 +534,7 @@ function handleTimerFinished(message) {
   // Play sound
   const audio = new Audio(chrome.runtime.getURL('../clock_alarm.mp3'));
   audio.play();
-  
+
   // Reset browser tab title
   document.title = 'Simple Focus Mode';
 }

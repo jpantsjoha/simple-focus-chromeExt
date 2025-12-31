@@ -107,7 +107,7 @@ jsFiles.forEach(file => {
   const filePath = path.join(__dirname, '..', file);
   if (fs.existsSync(filePath)) {
     const content = fs.readFileSync(filePath, 'utf8');
-    
+
     // Check for chrome API usage
     if (content.includes('chrome.storage')) usedPermissions.add('storage');
     if (content.includes('chrome.notifications')) usedPermissions.add('notifications');
@@ -115,6 +115,7 @@ jsFiles.forEach(file => {
       usedPermissions.add('declarativeNetRequest');
       usedPermissions.add('declarativeNetRequestFeedback');
     }
+    if (content.includes('chrome.contextMenus')) usedPermissions.add('contextMenus');
   }
 });
 

@@ -6,15 +6,20 @@ This is my take on the **Simple Focus Mode** Extension which I have created for 
 
 This is a minimalist Pomodoro Timer extension for Google Chrome called **Simple Focus Mode**. It helps users improve productivity by breaking their work into focused intervals, separated by short breaks. The extension features an elegant monochromatic design that reduces visual distractions while providing powerful time management tools.
 
-[![Short Walk-through Demo Video](https://img.youtube.com/vi/mbE6vxXMFlw/0.jpg)](https://www.youtube.com/watch?v=mbE6vxXMFlw)
+[![Short Walk-through Demo Video](https://img.youtube.com/vi/L4Tti-2yaEA/0.jpg)](https://www.youtube.com/watch?v=L4Tti-2yaEA)
 
-<img src="./screenshot.png" alt="Simple Focus Mode" width="400px"/>
+<div align="center">
+  <img src="AppSubmission/popup.png" alt="Popup UI" width="300px"/>
+
 
 ## Features
 
 - **Complete Pomodoro Cycle**: Full 25-5-25-5-25-5-25-15 minute cycles with automatic transitions
 - **Intelligent Website Blocking**: Dynamic blocking during focus sessions only (Facebook, Twitter, Instagram, YouTube, Reddit, TikTok)
-- **Elegant Minimal Design**: Monochromatic interface that reduces visual noise
+- **Glassmorphism UI**: 2026 "Liquid Calm" aesthetic with backdrop blurring and modern typography
+- **Context Menu "Zone In"**: Right-click anywhere to immediately start a focus session
+- **AI Readiness**: Built-in check for Gemini Nano capabilities
+- **+1 Minute Extension**: Quickly extend sessions without breaking flow
 - **Session Tracking**: Visual progress indicators and cycle completion tracking
 - **Dark Mode Support**: Seamless theme switching for different working environments
 - **Pause/Resume Functionality**: Full timer control with accurate time tracking

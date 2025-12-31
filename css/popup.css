@@ -1,44 +1,29 @@
-/* Minimal monochromatic theme focused on reducing visual noise */
-:root {
-  --bg-color: #fafafa;
-  --text-color: #2a2a2a;
-  --text-muted: #6a6a6a;
-  --accent-color: #333333;
-  --border-color: #e8e8e8;
-  --progress-bg: #f0f0f0;
-  --progress-fg: #333333;
-  --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.dark-mode {
-  --bg-color: #1a1a1a;
-  --text-color: #e8e8e8;
-  --text-muted: #a0a0a0;
-  --accent-color: #ffffff;
-  --border-color: #2a2a2a;
-  --progress-bg: #2a2a2a;
-  --progress-fg: #ffffff;
-  --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
+/* Minmimal monochromatic theme focused on reducing visual noise */
+/* Variables inherited from common.css */
 
 * {
   box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: var(--bg-color);
+  font-family: var(--font-stack);
+  background-color: transparent;
+  /* Transparent to let glass effect work if supported, else bg-color from common */
   color: var(--text-color);
   margin: 0;
   padding: 0;
   width: 320px;
   min-height: 360px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 #app {
   padding: 24px;
   text-align: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
+  min-height: 360px;
 }
 
 /* Utility classes */
@@ -424,26 +409,51 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Help Icon */
-.help-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: var(--text-muted);
-  color: var(--bg-color);
+/* Footer Icons and Layout */
+.cycle-progress {
+  margin-top: auto;
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* settings(left) - dots(center) - help(right) */
+  width: 100%;
+}
+
+.cycle-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.footer-icon {
+  background: none;
   border: none;
-  font-size: 12px;
-  font-weight: bold;
+  color: var(--text-muted);
+  /* Ensure visible in dark mode via variable */
+  font-size: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 8px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+  padding: 0;
 }
 
-.help-icon:hover {
-  background-color: var(--text-color);
-  transform: scale(1.1);
+.footer-icon:hover {
+  background-color: rgba(128, 128, 128, 0.2);
+  opacity: 1;
+  color: var(--text-color);
+}
+
+/* Ensure Settings and Help are visible */
+.settings-btn,
+.help-icon {
+  /* resets from previous specific styles if any */
 }
 
 /* About Page */
@@ -453,7 +463,9 @@ input[type="range"]::-moz-range-thumb {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--bg-color);
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amt));
+  -webkit-backdrop-filter: blur(var(--blur-amt));
   padding: 16px;
   overflow-y: hidden;
   z-index: 100;
